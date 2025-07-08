@@ -1,0 +1,44 @@
+    <section id="container_ventas"></section>
+<section id="not_sales" style="display: block;">
+    <div class="not_sales-content">
+        <h2>No existen ventas registradas</h2>
+        <p>Por favor, realiza una venta para visualizarla aquí.</p>
+    </div>
+</section>
+<script>
+    const sales = {{{ventas}}}
+  if (Object.keys(sales).length > 0) {
+    {{!-- document.getElementById('container_ventas').style.display = "block"; --}}
+    document.getElementById('not_sales').style.display = "none";
+    const allsales = document.getElementById("container_ventas");
+    Object.values(sales).forEach(sale => {
+      const createHtml = `
+          <section class="detalles_ventas">
+            <div>
+                <div class="head_venta">
+                    <h4>ID Venta | ${sale.ventas_id} </h4>
+                    <p>Sucursal | ${sale.id_sucursal} </p>
+                </div>
+                <h4>Productos</h4>
+                <section class="container-body_ventas">
+                    ${sale.productos.map(producto => `
+                        <div class="body_ventas">
+                            <div>
+                                <p>${producto.producto}</p>
+                                <p>${producto.cantidad}</p>
+                            </div> 
+                            <div>
+                            <p>Precio unitario: ${producto.precio_unitario}</p>
+                            <p>Subtotal: ${producto.subtotal}</p>
+                            </div> 
+                        </div>
+                    `).join('')}
+                </section>
+                <span>Total: ${sale.total}</span>
+            </div>
+          </section>
+      `;
+      allsales.insertAdjacentHTML("beforeend", createHtml);
+    });
+  }
+</script>
