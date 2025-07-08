@@ -21,63 +21,75 @@ sign_in_btn.addEventListener("click", () => {
 formSignUp.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const username = document.getElementById("userName").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password_signup").value;
-  const password2 = document.getElementById("password_signup-2").value;
-  const branch = document.getElementById("branch-store").value;
+  messageSignUn.innerText = "No se permite crear nuevas cuentas por el momento.";
+  messageSignUn.style.color = "red";
+  setTimeout(() => {
+    messageSignUn.innerText = "";
+  }, 3000);
 
-  if (password !== password2) {
-    messageSignUn.innerText = "Las contraseñas no coinciden";
-    setTimeout(() => {
-      messageSignUn.innerText = "";
-    }, 3000);
-    document.getElementById("password_signup").value = "";
-    document.getElementById("password_signup-2").value = "";
-    messageSignUn.style.color = "red";
-    return;
-  }
+  document.getElementById("userName").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("password_signup").value = "";
+  document.getElementById("password_signup-2").value = "";
+  document.getElementById("branch-store").value = "";
+  return;
+  // const username = document.getElementById("userName").value;
+  // const email = document.getElementById("email").value;
+  // const password = document.getElementById("password_signup").value;
+  // const password2 = document.getElementById("password_signup-2").value;
+  // const branch = document.getElementById("branch-store").value;
 
-  fetch("/singup", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, email, password, branch }),
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        messageSignUn.innerHTML = await res.text();
-        messageSignUn.style.color = "red";
+  // if (password !== password2) {
+  //   messageSignUn.innerText = "Las contraseñas no coinciden";
+  //   setTimeout(() => {
+  //     messageSignUn.innerText = "";
+  //   }, 3000);
+  //   document.getElementById("password_signup").value = "";
+  //   document.getElementById("password_signup-2").value = "";
+  //   messageSignUn.style.color = "red";
+  //   return;
+  // }
 
-        setTimeout(() => {
-          messageSignUn.innerHTML = "";
-        }, 3000);
+  // fetch("/singup", {
+  //   method: "post",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ username, email, password, branch }),
+  // })
+  //   .then(async (res) => {
+  //     if (!res.ok) {
+  //       messageSignUn.innerHTML = await res.text();
+  //       messageSignUn.style.color = "red";
 
-        document.getElementById("userName").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("password_signup").value = "";
-        document.getElementById("password_signup-2").value = "";
-        document.getElementById("branch-store").value = "";
-      } else {
-        console.log(res);
-        messageSignUn.innerHTML = "Usuario registrado correctamente";
-        messageSignUn.style.color = "green";
+  //       setTimeout(() => {
+  //         messageSignUn.innerHTML = "";
+  //       }, 3000);
 
-        document.getElementById("userName").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("password_signup").value = "";
-        document.getElementById("password_signup-2").value = "";
-        document.getElementById("branch-store").value = "";
+  //       document.getElementById("userName").value = "";
+  //       document.getElementById("email").value = "";
+  //       document.getElementById("password_signup").value = "";
+  //       document.getElementById("password_signup-2").value = "";
+  //       document.getElementById("branch-store").value = "";
+  //     } else {
+  //       console.log(res);
+  //       messageSignUn.innerHTML = "Usuario registrado correctamente";
+  //       messageSignUn.style.color = "green";
 
-        setTimeout(() => {
-          messageSignUn.innerHTML = "";
-          const click = document.getElementById("sign-in-btn");
-          click.click();
-        }, 2000);
-      }
-    })
-    .catch((error) => console.error(error));
+  //       document.getElementById("userName").value = "";
+  //       document.getElementById("email").value = "";
+  //       document.getElementById("password_signup").value = "";
+  //       document.getElementById("password_signup-2").value = "";
+  //       document.getElementById("branch-store").value = "";
+
+  //       setTimeout(() => {
+  //         messageSignUn.innerHTML = "";
+  //         const click = document.getElementById("sign-in-btn");
+  //         click.click();
+  //       }, 2000);
+  //     }
+  //   })
+  //   .catch((error) => console.error(error));
 });
 
 formSignIn.addEventListener("submit", (e) => {
