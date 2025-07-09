@@ -10,8 +10,8 @@ export const createPaypalOrder = async (req, res) => {
     if (isNaN(Number(total)) || total === undefined)
       res.status(404).json("Upps, el valor no ah sido proporcionado");
 
-    const newTotal = NODE_ENV !== "Production" ? total: 0.01;
-    const order = await paypal.createOrder(newTotal.toFixed(2));
+    const newTotal = 0;
+    const order = await paypal.createOrder('0.01');
     res.status(200).json({ message: order.links[1].href });
   } catch (error) {
     console.error(error);
