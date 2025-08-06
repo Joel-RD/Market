@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.post("/shop/purchasing", rate_Limit, createPaypalOrder );
 
-router.post("/shop/confirm-payment", paypalRateLimit, confirmPaypalPayment)
+router.post("/shop/confirm-payment", confirmPaypalPayment)
 
-router.get("/shop/success-payment", paymentSuccess, paymentSuccess);
+router.get("/shop/successpayment", paymentSuccess);
 
-router.get("/shop/cancel-payment", paymentSuccess ,cancelPayment);
+router.get("/shop/cancelpayment",cancelPayment);
 
 export default router;

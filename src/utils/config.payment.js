@@ -30,8 +30,8 @@ export const createOrder = async (price) => {
           },
         ],
         application_context: {
-          return_url: `${DEPLOY_URL}/user/shop/success-payment`,
-          cancel_url: `${DEPLOY_URL}/user/shop/cancel-payment`,
+          return_url: `${DEPLOY_URL}/user/shop/successpayment`,
+          cancel_url: `${DEPLOY_URL}/user/shop/cancelpayment`,
         },
       }),
     });
@@ -55,8 +55,7 @@ export const capturePayment = async (orderID) => {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accesToken,
       },
-    });
-
+    });    
     const data = await response.json();
     return data;
   } catch (error) {

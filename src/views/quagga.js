@@ -9,6 +9,16 @@ const codigoProducto = document.getElementById("codigo");
 const unidades = document.getElementById("unidades");
 const total = document.getElementById("total");
 
+const searchButton = document.getElementById("search-code");
+searchButton.addEventListener("click", async () => {
+  if (!codigoProducto.value) {
+    alert("Por favor, ingresa un código de barras para buscar.");
+    return;
+  }
+
+  fetchProducts(codigoProducto.value);
+})
+
 Quagga.init(
   {
     inputStream: {
@@ -45,11 +55,9 @@ Quagga.init(
   }
 );
 
-Quagga.onDetected(async function (result) {
-  const code = result.codeResult.code;
-
+const fetchProducts = async (codeProducts) => {
   try {
-    const request = await fetch(`/user/shop/scan/${code}`, {
+    const request = await fetch(`/user/shop/scan/${codeProducts}`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -95,7 +103,13 @@ Quagga.onDetected(async function (result) {
   } catch (error) {
     console.error("Error:", error.message);
   }
+}
+
+Quagga.onDetected(async function (result) {
+  const code = result.codeResult.code;
+  fetchProducts(code);
 });
+
 
 document.getElementById("decrease").addEventListener("click", () => {
   if (productoActual && productoEscaneado[productoActual]) {
@@ -143,8 +157,10 @@ document.getElementById("agregar").addEventListener("click", async () => {
   const precioTotal = document.getElementById("totalApagar");
   precioTotal.value = " ";
 
+  
+
   localStorage.setItem("productosCompra", JSON.stringify(productoEscaneado))
-  localStorage.setItem("totalCompra", JSON.stringify(totalPrecio))
+  localStorage.setItem("totalCompra", totalPrecio)
   try {
     const request = await fetch(`/user/shop/purchasing`, {
       method: "post",
@@ -156,11 +172,37 @@ document.getElementById("agregar").addEventListener("click", async () => {
       }),
     });
 
-    const data = await request.json();
-    console.log(data.message);
-    
+    const data = await request.json();    
     window.open(data.message, "_blank", "width=500,height=700");
   } catch (error) {
     console.error("Error:", error.message);
   }
 });
+
+async function pedirPermisoCamara() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    console.log("Permiso concedido para la cámara.");
+    // Puedes usar el stream con un elemento <video>
+    const video = document.querySelector("video");
+    if (video) {
+      video.srcObject = stream;
+      video.play();
+    }
+  } catch (error) {
+    console.error("Permiso de cámara denegado o error:", error);
+    alert("No se pudo acceder a la cámara. Verifica los permisos del navegador.");
+  }
+}
+
+function intentarAbrirVentanaEmergente() {
+  const nuevaVentana = window.open("https://www.ejemplo.com", "_blank");
+
+  if (nuevaVentana === null) {
+    console.warn("¡Ventana emergente bloqueada!");
+    alert("Por favor, permite ventanas emergentes en este sitio para continuar.");
+  } else {
+    console.log("Ventana emergente abierta con éxito.");
+    nuevaVentana.focus();
+  }
+}
