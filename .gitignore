@@ -1,2 +1,7 @@
 node_modules
+<<<<<<< HEAD
 .env
+=======
+.env
+src/utils/cleanSales.js
+>>>>>>> 32f288072fe78e58a78e0f095ffa749035ec5694

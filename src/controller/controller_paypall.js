@@ -6,12 +6,17 @@ const { NODE_ENV } = globalEnvConfig;
 
 export const createPaypalOrder = async (req, res) => {
   try {
-    let { total } = req.body;
-    if (isNaN(Number(total)) || total === undefined)
-      res.status(404).json("Upps, el valor no ah sido proporcionado");
+    let { total } = req.body;    
+    if (!total) {
+      return res.status(400).json("Falta el total de la compra");
+    }
+    total = "0.01";
+    const order = await paypal.createOrder(total);
+    
+    if (!order || !order.links || order.links.length < 2) {
+      return res.status(500).json({ message: "Error al crear la orden de PayPal" });
+    }
 
-    const newTotal = 0;
-    const order = await paypal.createOrder('0.01');
     res.status(200).json({ message: order.links[1].href });
   } catch (error) {
     console.error(error);
@@ -22,20 +27,20 @@ export const createPaypalOrder = async (req, res) => {
 export const confirmPaypalPayment = async (req, res) => {
   try {
     let { productos, orderID, total } = req.body;
-    const newTotal = total;
+    let newTotal = 0;
+
+    if (!orderID || !productos || !total) {
+      return res.status(400).json("Faltan datos necesarios");
+    }
+
+    newTotal = parseFloat(total);
+    total = newTotal
 
     const paymentResult = await paypal.capturePayment(orderID);
     if (paymentResult.status !== "COMPLETED") {
       return res.status(400).json({ message: "Pago no completado" });
     }
 
-    if (typeof newTotal !== "number") {
-      total = Number(newTotal);
-    }
-
-    console.log(req.body, total);
-
-    //usuario logueado
     const user = req.session.userEmail;
     const queryUser = `SELECT * FROM usersauth WHERE email = $1`;
     const paramsUser = [user];
@@ -82,7 +87,6 @@ export const confirmPaypalPayment = async (req, res) => {
       await executeQuery(detalleVentaQuery, detalleVentaParams);
     }
 
-    // Actualizar stock
     for (const barCode in productos) {
       const query = `SELECT id, stock FROM productos WHERE codigo_barras = $1`;
       const params = [barCode];
