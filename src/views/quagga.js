@@ -172,6 +172,7 @@ document.getElementById("agregar").addEventListener("click", async () => {
       }),
     });
 
+    alert("Credenciales para usar paypal en modo sandbox: \nEmail: user_admin@gmail.com) \nContraseña: User@admin01");
     const data = await request.json();    
     window.open(data.message, "_blank", "width=500,height=700");
   } catch (error) {
