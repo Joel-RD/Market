@@ -6,11 +6,11 @@
     <div class="icon-fix"></div>
   </div>
 
-    <script>
-    window.addEventListener('DOMContentLoaded', async function() {
+  <script>
+    window.addEventListener('DOMContentLoaded', async function () {
       const params = new URLSearchParams(location.search);
       const orderID = params.get("token");
-      const productos = JSON.parse(localStorage.getItem("productosCompra", ));
+      const productos = JSON.parse(localStorage.getItem("productosCompra",));
       const total = localStorage.getItem("totalCompra")
       try {
         if (orderID && productos) {
@@ -30,10 +30,12 @@
       } catch (error) {
         console.error("Error:", error.message);
       } finally {
-        setTimeout(function(){ window.close(); }, 3000);
+        if (window.opener) {
+          setTimeout(function () { window.close(); }, 3000);
+        }
       }
     });
-    </script>
-    
-    <h4>¡Gracias por tu compra!</h2>
-  </div>
+  </script>
+
+  <h4>¡Gracias por tu compra!</h2>
+</div>
